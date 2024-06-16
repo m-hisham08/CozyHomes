@@ -30,7 +30,7 @@ public class User extends DateAudit {
     private String firstName;
 
     @NotBlank
-    @Size(max = 40)
+    @Size(min = 2, max = 40)
     private String lastName;
 
     @NotBlank
@@ -44,6 +44,7 @@ public class User extends DateAudit {
     @NotBlank
     @NaturalId
     @Email
+    @Size(max = 254)
     private String email;
 
     @NotBlank

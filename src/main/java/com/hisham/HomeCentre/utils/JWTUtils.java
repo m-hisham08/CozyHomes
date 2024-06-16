@@ -31,7 +31,7 @@ public class JWTUtils {
     }
 
     public String generateToken(Authentication authentication){
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
