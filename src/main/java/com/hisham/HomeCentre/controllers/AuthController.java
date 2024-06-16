@@ -1,5 +1,6 @@
 package com.hisham.HomeCentre.controllers;
 
+import com.hisham.HomeCentre.exceptions.CustomExceptions.ConflictException;
 import com.hisham.HomeCentre.models.Role;
 import com.hisham.HomeCentre.models.RoleEnum;
 import com.hisham.HomeCentre.models.User;
@@ -67,13 +68,11 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUpRequest){
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity(new APIResponse(false, "Username is already taken!"),
-                    HttpStatus.BAD_REQUEST);
+            throw new ConflictException("Username already in use!");
         }
 
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity(new APIResponse(false, "Email Address already in use!"),
-                    HttpStatus.BAD_REQUEST);
+            throw new ConflictException("Email already in use!");
         }
 
         // Creating user's account
