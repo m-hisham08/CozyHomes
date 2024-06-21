@@ -1,0 +1,95 @@
+15:32:40.771 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+15:32:40.842 [restartedMain] INFO  c.h.HomeCentre.HomeCentreApplication - Starting HomeCentreApplication using Java 21.0.3 with PID 9230 (/home/hisham/Desktop/JavaProject/HomeCentre/HomeCentre/target/classes started by hisham in /home/hisham/Desktop/JavaProject/HomeCentre/HomeCentre)
+15:32:40.844 [restartedMain] INFO  c.h.HomeCentre.HomeCentreApplication - The following 1 profile is active: "dev"
+15:32:41.064 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+15:32:41.065 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+15:32:43.083 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+15:32:43.195 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 99 ms. Found 2 JPA repository interfaces.
+15:32:45.855 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+15:32:45.880 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+15:32:45.885 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+15:32:45.886 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.24]
+15:32:45.969 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+15:32:45.970 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 4904 ms
+15:32:46.803 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+15:32:46.888 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.2.Final
+15:32:46.956 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+15:32:47.547 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+15:32:47.592 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+15:32:48.388 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@169daed2
+15:32:48.391 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+15:32:50.537 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+15:32:50.663 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+15:32:51.605 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+15:32:51.713 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+15:32:52.440 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+15:32:52.564 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@25792291, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@73fb4cb9, org.springframework.security.web.context.SecurityContextHolderFilter@50c10c50, org.springframework.security.web.header.HeaderWriterFilter@17f3ef4c, org.springframework.security.web.authentication.logout.LogoutFilter@5367c1b6, com.hisham.HomeCentre.filters.JWTAuthenticationFilter@265e0ca8, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@3ca44afd, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@7d480ca5, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@2bc75d7f, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@432ebea6, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@134637bf, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@136c11b2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@32bb377f, org.springframework.security.web.access.ExceptionTranslationFilter@3735239a, org.springframework.security.web.access.intercept.AuthorizationFilter@62163280]
+15:32:53.398 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+15:32:53.493 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+15:32:53.507 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+15:32:53.540 [restartedMain] INFO  c.h.HomeCentre.HomeCentreApplication - Started HomeCentreApplication in 13.727 seconds (process running for 15.352)
+15:33:06.799 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+15:33:06.821 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+15:33:06.893 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+15:33:11.266 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+15:33:11.364 [restartedMain] INFO  c.h.HomeCentre.HomeCentreApplication - Starting HomeCentreApplication using Java 21.0.3 with PID 9430 (/home/hisham/Desktop/JavaProject/HomeCentre/HomeCentre/target/classes started by hisham in /home/hisham/Desktop/JavaProject/HomeCentre/HomeCentre)
+15:33:11.367 [restartedMain] INFO  c.h.HomeCentre.HomeCentreApplication - The following 1 profile is active: "dev"
+15:33:11.619 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+15:33:11.620 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+15:33:15.119 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+15:33:15.270 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 138 ms. Found 2 JPA repository interfaces.
+15:33:17.990 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+15:33:18.015 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+15:33:18.024 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+15:33:18.024 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.24]
+15:33:18.139 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+15:33:18.140 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 6518 ms
+15:33:19.235 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+15:33:19.357 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.2.Final
+15:33:19.419 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+15:33:20.000 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+15:33:20.045 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+15:33:20.717 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@31f1219a
+15:33:20.719 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+15:33:22.959 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+15:33:23.087 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+15:33:23.848 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+15:33:23.937 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+15:33:24.706 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+15:33:24.872 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@458463e8, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6aafec2, org.springframework.security.web.context.SecurityContextHolderFilter@418034a3, org.springframework.security.web.header.HeaderWriterFilter@4e9ab48f, org.springframework.security.web.authentication.logout.LogoutFilter@4f62308d, com.hisham.HomeCentre.filters.JWTAuthenticationFilter@17fe8080, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@4e732b41, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@3c46bdf9, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@37754a19, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@3aefd8b1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@234b654c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@278a3b61, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1fd7f3e, org.springframework.security.web.access.ExceptionTranslationFilter@629dacd8, org.springframework.security.web.access.intercept.AuthorizationFilter@3e206a48]
+15:33:25.918 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+15:33:26.034 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+15:33:26.053 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+15:33:26.103 [restartedMain] INFO  c.h.HomeCentre.HomeCentreApplication - Started HomeCentreApplication in 15.723 seconds (process running for 17.205)
+15:33:55.417 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+15:33:55.428 [Thread-5] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+15:33:55.456 [Thread-5] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+15:33:55.465 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+15:33:55.501 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+10:03:55.862 [restartedMain] INFO  c.h.HomeCentre.HomeCentreApplication - Starting HomeCentreApplication using Java 21.0.3 with PID 9430 (/home/hisham/Desktop/JavaProject/HomeCentre/HomeCentre/target/classes started by hisham in /home/hisham/Desktop/JavaProject/HomeCentre/HomeCentre)
+10:03:55.863 [restartedMain] INFO  c.h.HomeCentre.HomeCentreApplication - The following 1 profile is active: "dev"
+10:03:56.513 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+10:03:56.541 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 27 ms. Found 2 JPA repository interfaces.
+10:03:56.917 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+10:03:56.918 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+10:03:56.919 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+10:03:56.919 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.24]
+10:03:56.952 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+10:03:56.952 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1084 ms
+10:03:57.303 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+10:03:57.306 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+10:03:57.323 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+10:03:57.325 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+10:03:57.375 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@49581a90
+10:03:57.375 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+10:03:57.587 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+10:03:57.669 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+10:03:58.024 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+10:03:58.077 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+10:03:58.347 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+10:03:58.390 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2a285c32, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@19d12e4c, org.springframework.security.web.context.SecurityContextHolderFilter@1dee77ac, org.springframework.security.web.header.HeaderWriterFilter@1b0f1160, org.springframework.security.web.authentication.logout.LogoutFilter@dfbad65, com.hisham.HomeCentre.filters.JWTAuthenticationFilter@35daf16d, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@6b9abb2a, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@67a54119, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@2365f7e5, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@a2c5a6b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@15697955, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4bd98c81, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4a44a8b1, org.springframework.security.web.access.ExceptionTranslationFilter@7eb8181e, org.springframework.security.web.access.intercept.AuthorizationFilter@76adbb17]
+10:03:58.671 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+10:03:58.698 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+10:03:58.700 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+10:03:58.708 [restartedMain] INFO  c.h.HomeCentre.HomeCentreApplication - Started HomeCentreApplication in 2.942 seconds (process running for 49.81)
+10:03:58.712 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged

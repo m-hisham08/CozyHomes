@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 
 ### Sensitive Data ###
-src/main/resources/application-prod.properties
+*.yml
 
 
 ### STS ###
