@@ -7,7 +7,6 @@ target/
 ### Sensitive Data ###
 *.yml
 
-
 ### STS ###
 .apt_generated
 .classpath
