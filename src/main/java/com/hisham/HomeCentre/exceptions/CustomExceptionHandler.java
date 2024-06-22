@@ -137,6 +137,14 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.SERVICE_UNAVAILABLE);
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ExceptionDTO> handleResourceNotFoundException(ResourceNotFoundException exception, WebRequest request) {
+        String errorMessage = exception.getMessage();
+
+        ExceptionDTO errorDetails = new ExceptionDTO(new Date().toInstant(), errorMessage, request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> globalExceptionHandler(Exception exception, WebRequest request){
 

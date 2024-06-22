@@ -1,7 +1,6 @@
-package com.hisham.HomeCentre.payloads.authentication;
+package com.hisham.HomeCentre.payloads;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
