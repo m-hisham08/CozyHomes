@@ -48,7 +48,7 @@ public class Product extends UserDateAudit {
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews = new ArrayList<>();
+    private Set<Review> reviews = new HashSet<>();
 
     public Boolean isAvailable(){
         return stock > 0;

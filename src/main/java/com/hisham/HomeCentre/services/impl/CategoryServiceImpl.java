@@ -52,7 +52,6 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = new Category();
         category.setName(categoryName);
-        category.setCreatedBy(userDetails.getId());
 
         return categoryRepository.save(category);
     }
@@ -89,7 +88,6 @@ public class CategoryServiceImpl implements CategoryService {
                 () -> new ResourceNotFoundException("Category", "ID", categoryId));
 
         category.setName(newCategoryName);
-        category.setLastModifiedBy(userDetails.getId());
 
         categoryRepository.save(category);
     }

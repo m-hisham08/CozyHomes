@@ -12,6 +12,7 @@ import com.hisham.HomeCentre.repositories.RoleRepository;
 import com.hisham.HomeCentre.repositories.UserRepository;
 import com.hisham.HomeCentre.utils.JWTUtils;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +31,7 @@ import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@Slf4j
 public class AuthController {
     @Autowired
     private JWTUtils jwtUtils;
@@ -81,9 +83,10 @@ public class AuthController {
         Role userRole = roleRepository.findByName(RoleEnum.ROLE_USER)
                 .orElseThrow(() -> new RuntimeException("User Role not set."));
 
-        user.setRoles(Collections.singleton(userRole));
+        user.getRoles().add(userRole);
 
         User result = userRepository.save(user);
+
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/users/{username}")

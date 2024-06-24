@@ -11,7 +11,9 @@ import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
 import javax.lang.model.element.Name;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -50,10 +52,12 @@ public class User extends DateAudit {
     @NotBlank
     private String password;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+            inverseJoinColumns = @JoinColumn(name = "role_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role_id"})
+    )
     private Set<Role> roles = new HashSet<>();
 
     public User(String firstName, String lastName, String phone, String username, String email, String password) {

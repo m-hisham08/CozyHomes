@@ -1,14 +1,12 @@
 package com.hisham.HomeCentre.payloads;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserSummary {
     private Long id;
     private String firstName;

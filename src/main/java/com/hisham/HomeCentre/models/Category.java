@@ -30,7 +30,7 @@ public class Category extends UserDateAudit {
     private String name;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products = new ArrayList<>();
+    private Set<Product> products = new HashSet<>();
 
     public void addProduct(Product product){
         products.add(product);
