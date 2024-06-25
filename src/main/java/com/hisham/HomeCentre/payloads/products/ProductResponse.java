@@ -1,5 +1,6 @@
 package com.hisham.HomeCentre.payloads.products;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hisham.HomeCentre.payloads.UserSummary;
 import com.hisham.HomeCentre.payloads.categories.CategoryResponse;
 import jakarta.validation.constraints.*;
@@ -13,6 +14,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductResponse {
     private Long id;
     private String name;
