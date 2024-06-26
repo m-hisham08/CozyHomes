@@ -1,5 +1,6 @@
 package com.hisham.HomeCentre.services.impl;
 
+import com.hisham.HomeCentre.exceptions.CustomExceptions.CartNotFoundException;
 import com.hisham.HomeCentre.exceptions.CustomExceptions.ResourceNotFoundException;
 import com.hisham.HomeCentre.models.Cart;
 import com.hisham.HomeCentre.models.CartItem;
@@ -38,7 +39,7 @@ public class CartServiceImpl implements CartService {
         User currentUser = userRepository.findByEmailOrUsername(user.getUsername(), user.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", user.getUsername()));
         return cartRepository.findByUserId(currentUser.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Cart", null, null));
+                .orElseThrow(() -> new CartNotFoundException("Cart not found for user with username: "+ currentUser.getUsername() + ". Please add products to create your cart!"));
     }
 
     @Override
