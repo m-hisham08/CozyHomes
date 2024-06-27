@@ -1,5 +1,7 @@
 package com.hisham.HomeCentre.constants;
 
+import java.util.Set;
+
 public final class AppConstants {
     private AppConstants() {
         // Private constructor to prevent instantiation
@@ -23,5 +25,10 @@ public final class AppConstants {
         public static final String SORT_BY = "createdAt";
         public static final String SORT = "DESC";
         public static final int MAX_PAGE_SIZE = 50;
+    }
+
+    public static class ImageUpload{
+        public static final Set<String> ALLOWED_FILE_TYPES = Set.of("image/jpeg", "image/png", "image/gif");
+        public static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
     }
 }

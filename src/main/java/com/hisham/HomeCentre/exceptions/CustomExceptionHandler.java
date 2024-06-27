@@ -153,6 +153,23 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+
+    @ExceptionHandler(CloudinaryException.class)
+    public ResponseEntity<ExceptionDTO> handleCloudinaryException(CloudinaryException exception, WebRequest request) {
+        String errorMessage = exception.getMessage();
+
+        ExceptionDTO errorDetails = new ExceptionDTO(new Date().toInstant(), errorMessage, request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+
+    @ExceptionHandler(ImageUploadException.class)
+    public ResponseEntity<ExceptionDTO> handleImageUploadException(ImageUploadException exception, WebRequest request) {
+        String errorMessage = exception.getMessage();
+
+        ExceptionDTO errorDetails = new ExceptionDTO(new Date().toInstant(), errorMessage, request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> globalExceptionHandler(Exception exception, WebRequest request){
 
