@@ -170,6 +170,14 @@ public class CustomExceptionHandler {
         ExceptionDTO errorDetails = new ExceptionDTO(new Date().toInstant(), errorMessage, request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     }
+
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<ExceptionDTO> handlePaymentException(PaymentException exception, WebRequest request) {
+        String errorMessage = exception.getMessage();
+
+        ExceptionDTO errorDetails = new ExceptionDTO(new Date().toInstant(), errorMessage, request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.PAYMENT_REQUIRED);
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> globalExceptionHandler(Exception exception, WebRequest request){
 
