@@ -1,13 +1,7 @@
 package com.hisham.HomeCentre.payloads.orders;
 
-import com.hisham.HomeCentre.models.Order;
-import com.hisham.HomeCentre.models.Product;
 import com.hisham.HomeCentre.payloads.products.ProductResponse;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import lombok.*;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter

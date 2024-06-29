@@ -1,10 +1,6 @@
 package com.hisham.HomeCentre.payloads.orders;
 
-import com.hisham.HomeCentre.models.OrderItem;
-import com.hisham.HomeCentre.models.OrderStatus;
-import com.hisham.HomeCentre.models.User;
 import com.hisham.HomeCentre.payloads.UserSummary;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;

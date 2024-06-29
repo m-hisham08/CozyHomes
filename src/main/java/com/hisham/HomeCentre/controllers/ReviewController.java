@@ -13,7 +13,6 @@ import com.hisham.HomeCentre.payloads.reviews.ReviewRequest;
 import com.hisham.HomeCentre.payloads.reviews.ReviewResponse;
 import com.hisham.HomeCentre.repositories.UserRepository;
 import com.hisham.HomeCentre.security.CurrentUser;
-import com.hisham.HomeCentre.security.CustomUserDetails;
 import com.hisham.HomeCentre.services.ProductService;
 import com.hisham.HomeCentre.services.RedisService;
 import com.hisham.HomeCentre.services.ReviewService;

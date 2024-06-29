@@ -19,7 +19,6 @@ import com.hisham.HomeCentre.security.CustomUserDetails;
 import com.hisham.HomeCentre.services.CategoryService;
 import com.hisham.HomeCentre.services.ProductService;
 import com.hisham.HomeCentre.services.RedisService;
-import com.hisham.HomeCentre.services.impl.ProductServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

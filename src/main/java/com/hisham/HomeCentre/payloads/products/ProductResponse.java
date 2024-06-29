@@ -3,7 +3,6 @@ package com.hisham.HomeCentre.payloads.products;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hisham.HomeCentre.payloads.UserSummary;
 import com.hisham.HomeCentre.payloads.categories.CategoryResponse;
-import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;

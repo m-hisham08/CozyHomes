@@ -1,6 +1,5 @@
 package com.hisham.HomeCentre.payloads.authentication.SignIn;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;

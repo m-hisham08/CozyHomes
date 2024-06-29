@@ -13,7 +13,6 @@ import com.hisham.HomeCentre.repositories.ReviewRepository;
 import com.hisham.HomeCentre.repositories.UserRepository;
 import com.hisham.HomeCentre.services.ReviewService;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,9 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {

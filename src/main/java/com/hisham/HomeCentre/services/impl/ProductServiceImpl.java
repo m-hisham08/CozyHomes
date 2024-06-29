@@ -1,6 +1,5 @@
 package com.hisham.HomeCentre.services.impl;
 
-import com.hisham.HomeCentre.constants.AppConstants;
 import com.hisham.HomeCentre.exceptions.CustomExceptions.BadRequestException;
 import com.hisham.HomeCentre.exceptions.CustomExceptions.ConflictException;
 import com.hisham.HomeCentre.exceptions.CustomExceptions.ResourceNotFoundException;

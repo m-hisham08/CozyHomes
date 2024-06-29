@@ -1,8 +1,6 @@
 package com.hisham.HomeCentre.payloads.authentication.SignIn;
 
-import com.hisham.HomeCentre.utils.JWTUtils;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

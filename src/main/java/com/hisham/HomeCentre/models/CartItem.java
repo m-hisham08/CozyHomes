@@ -3,7 +3,6 @@ package com.hisham.HomeCentre.models;
 import com.hisham.HomeCentre.models.audit.UserDateAudit;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity

@@ -7,8 +7,6 @@ public final class AppConstants {
         // Private constructor to prevent instantiation
     }
 
-    public static final String API_BASE_PATH = "/api/v1";
-
     public static class ErrorMessages {
         public static final String PRODUCT_NOT_FOUND = "Product not found.";
         public static final String CATEGORY_NOT_FOUND = "Category not found.";
@@ -29,7 +27,7 @@ public final class AppConstants {
 
     public static class ImageUpload{
         public static final Set<String> ALLOWED_FILE_TYPES = Set.of("image/jpeg", "image/png", "image/gif");
-        public static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
+        public static final long MAX_FILE_SIZE = 5 * 1024 * 1024; //5MB
     }
 
     public static class Redis{
