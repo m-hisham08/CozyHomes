@@ -31,4 +31,9 @@ public final class AppConstants {
         public static final Set<String> ALLOWED_FILE_TYPES = Set.of("image/jpeg", "image/png", "image/gif");
         public static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
     }
+
+    public static class Redis{
+        public static final String PRODUCT_KEY_PREFIX = "product:";
+        public static final Long TIME_TO_LIVE = 3600L; // Cached for one hour
+    }
 }

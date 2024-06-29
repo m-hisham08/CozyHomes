@@ -1,5 +1,9 @@
 package com.hisham.HomeCentre.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hisham.HomeCentre.models.audit.UserDateAudit;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -50,6 +54,7 @@ public class Product extends UserDateAudit {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
 
+    @JsonIgnore
     public Boolean isAvailable(){
         return stock > 0;
     }

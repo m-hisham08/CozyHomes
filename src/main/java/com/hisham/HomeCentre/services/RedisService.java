@@ -1,6 +1,8 @@
 package com.hisham.HomeCentre.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,9 +18,14 @@ public class RedisService {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     public <T> T get(String key, Class<T> T){
         Object object = redisTemplate.opsForValue().get(key);
-        ObjectMapper objectMapper = new ObjectMapper();
+        if(object == null){
+            return null;
+        }
         try {
             log.debug("Retrieving the value of key: {} from cache", key);
            return objectMapper.reader().readValue(object.toString(), T);
@@ -30,7 +37,7 @@ public class RedisService {
 
     public void set(String key, Object value, Long ttl){
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
+
             String jsonValue = objectMapper.writeValueAsString(value);
             redisTemplate.opsForValue().set(key, jsonValue, ttl, TimeUnit.SECONDS);
             log.debug("Set key: {} in cache with TTL: {} seconds", key, ttl);

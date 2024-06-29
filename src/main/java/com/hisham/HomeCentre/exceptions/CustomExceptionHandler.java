@@ -178,6 +178,16 @@ public class CustomExceptionHandler {
         ExceptionDTO errorDetails = new ExceptionDTO(new Date().toInstant(), errorMessage, request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.PAYMENT_REQUIRED);
     }
+
+    @ExceptionHandler(EmailException.class)
+    public ResponseEntity<ExceptionDTO> handleEmailException(EmailException exception, WebRequest request) {
+        String errorMessage = exception.getMessage();
+
+        ExceptionDTO errorDetails = new ExceptionDTO(new Date().toInstant(), errorMessage, request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> globalExceptionHandler(Exception exception, WebRequest request){
 
