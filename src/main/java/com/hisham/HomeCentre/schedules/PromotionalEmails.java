@@ -1,13 +1,16 @@
 package com.hisham.HomeCentre.schedules;
 
 import com.hisham.HomeCentre.models.User;
+import com.hisham.HomeCentre.models.kafka.EmailData;
 import com.hisham.HomeCentre.repositories.UserRepository;
 import com.hisham.HomeCentre.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class PromotionalEmails {
@@ -18,9 +21,11 @@ public class PromotionalEmails {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private KafkaTemplate<String, EmailData> kafkaTemplate;
 
-       @Scheduled(cron = "0 0 9 ? * MON") // Every Monday at 9 AM
-//     @Scheduled(cron = "0 * * ? * *") // Every Minute (Test with breakpoints)
+//    @Scheduled(cron = "0 0 9 ? * MON") // Every Monday at 9 AM
+     @Scheduled(cron = "0 * * ? * *") // Every Minute (Test with breakpoints)
     public void getAllUsersAndSendPromotionalEmails(){
         List<User> users = userRepository.findAll();
         for (User user: users){
@@ -56,7 +61,10 @@ public class PromotionalEmails {
                     "</body>\n" +
                     "</html>\n";
             String to = user.getEmail();
-            emailService.sendEmail(to, subject, content);
+
+            EmailData emailData = new EmailData("hishamstudyjam@gmail.com", subject, content);
+            kafkaTemplate.send("email", to, emailData);
+//            emailService.sendEmail(to, subject, content);
         }
     }
 }
