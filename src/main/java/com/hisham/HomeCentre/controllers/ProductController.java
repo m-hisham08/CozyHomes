@@ -183,7 +183,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<?> deleteProduct(
+    public ResponseEntity<Void> deleteProduct(
             @CurrentUser CustomUserDetails userDetails,
             @PathVariable(name = "productId") Long productId
     ){

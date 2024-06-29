@@ -189,7 +189,7 @@ public class CustomExceptionHandler {
 
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> globalExceptionHandler(Exception exception, WebRequest request){
+    public ResponseEntity<ExceptionDTO> globalExceptionHandler(Exception exception, WebRequest request){
 
         ExceptionDTO exceptionDTO = new ExceptionDTO(
                 new Date().toInstant(),

@@ -49,7 +49,7 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody SignInRequest signInRequest) {
+    public ResponseEntity<JWTAuthenticationResponse> authenticateUser(@Valid @RequestBody SignInRequest signInRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -65,7 +65,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUpRequest){
+    public ResponseEntity<APIResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest){
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
             throw new ConflictException("Username already in use!");
         }

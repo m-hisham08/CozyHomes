@@ -164,7 +164,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{reviewId}")
-    public ResponseEntity<?> deleteProduct(
+    public ResponseEntity<Void> deleteProduct(
             @CurrentUser UserDetails userDetails,
             @PathVariable Long reviewId
     )

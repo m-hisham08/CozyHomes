@@ -18,7 +18,7 @@ public class ImageUploadController {
     private CloudinaryImageUploadService cloudinaryService;
 
     @PostMapping("")
-    public ResponseEntity<?> uploadImage(
+    public ResponseEntity<Map> uploadImage(
             @RequestParam(value = "image") MultipartFile file
     ){
         Map imageData = cloudinaryService.upload(file);
