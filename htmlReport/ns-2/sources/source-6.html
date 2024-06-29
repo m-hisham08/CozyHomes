@@ -1,0 +1,243 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ProductServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.hisham.HomeCentre.services.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: ProductServiceImpl (com.hisham.HomeCentre.services.impl)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProductServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/45)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.hisham.HomeCentre.services.impl;
+&nbsp;
+&nbsp;import com.hisham.HomeCentre.constants.AppConstants;
+&nbsp;import com.hisham.HomeCentre.exceptions.CustomExceptions.BadRequestException;
+&nbsp;import com.hisham.HomeCentre.exceptions.CustomExceptions.ConflictException;
+&nbsp;import com.hisham.HomeCentre.exceptions.CustomExceptions.ResourceNotFoundException;
+&nbsp;import com.hisham.HomeCentre.models.Category;
+&nbsp;import com.hisham.HomeCentre.models.Product;
+&nbsp;import com.hisham.HomeCentre.payloads.products.ProductEditRequest;
+&nbsp;import com.hisham.HomeCentre.payloads.products.ProductRequest;
+&nbsp;import com.hisham.HomeCentre.repositories.CategoryRepository;
+&nbsp;import com.hisham.HomeCentre.repositories.ProductRepository;
+&nbsp;import com.hisham.HomeCentre.security.CustomUserDetails;
+&nbsp;import com.hisham.HomeCentre.services.ProductService;
+&nbsp;import com.hisham.HomeCentre.services.RedisService;
+&nbsp;import jakarta.transaction.Transactional;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Pageable;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;@Service
+<b class="nc">&nbsp;public class ProductServiceImpl implements ProductService {</b>
+&nbsp;    @Autowired
+&nbsp;    private RedisService redisService;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    ProductRepository productRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    CategoryRepository categoryRepository;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public Page&lt;Product&gt; getAllProducts(int page, int size, Sort.Direction sortDirection, String sortBy) {
+<b class="nc">&nbsp;        Pageable pageable = PageRequest.of(page, size, sortDirection, sortBy);</b>
+<b class="nc">&nbsp;        Page&lt;Product&gt; products = productRepository.findAll(pageable);</b>
+<b class="nc">&nbsp;        return products;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public Product getSingleProduct(Long productId) {
+<b class="nc">&nbsp;        if (productId &lt;= 0) {</b>
+<b class="nc">&nbsp;            throw new BadRequestException(&quot;Invalid product ID&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;//        String cacheKey = AppConstants.Redis.PRODUCT_KEY_PREFIX + productId;
+&nbsp;//        Product cachedProduct = redisService.get(cacheKey, Product.class);
+&nbsp;//        if (cachedProduct != null) {
+&nbsp;//            return cachedProduct;
+&nbsp;//        }
+&nbsp;
+<b class="nc">&nbsp;        Product product = productRepository.findById(productId).orElseThrow(</b>
+<b class="nc">&nbsp;                () -&gt; new ResourceNotFoundException(&quot;Product&quot;, &quot;ID&quot;, productId)</b>
+&nbsp;        );
+&nbsp;
+<b class="nc">&nbsp;        if (product.getCategory() == null) {</b>
+<b class="nc">&nbsp;            throw new ResourceNotFoundException(&quot;Category&quot;, &quot;ID&quot;, &quot;not found&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;//        redisService.set(cacheKey, product, AppConstants.Redis.TIME_TO_LIVE);
+<b class="nc">&nbsp;        return product;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public Product createProduct(CustomUserDetails userDetails, ProductRequest productRequest) {
+<b class="nc">&nbsp;        Boolean isExists = productRepository.existsByName(productRequest.getName());</b>
+<b class="nc">&nbsp;        if (isExists) {</b>
+<b class="nc">&nbsp;            throw new ConflictException(&quot;The Product with the product name &quot; +</b>
+<b class="nc">&nbsp;                    productRequest.getName() + &quot; already exists!&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Category category = categoryRepository.findById(productRequest.getCategoryId())</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Category&quot;, &quot;ID&quot;, productRequest.getCategoryId()));</b>
+&nbsp;
+<b class="nc">&nbsp;        Product product = new Product();</b>
+<b class="nc">&nbsp;        product.setName(productRequest.getName());</b>
+<b class="nc">&nbsp;        product.setCategory(category);</b>
+<b class="nc">&nbsp;        product.setDescription(productRequest.getDescription());</b>
+<b class="nc">&nbsp;        product.setImageURL(productRequest.getImageURL());</b>
+<b class="nc">&nbsp;        product.setPrice(productRequest.getPrice());</b>
+<b class="nc">&nbsp;        product.setStock(productRequest.getStock());</b>
+<b class="nc">&nbsp;        return productRepository.save(product);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public Product editProduct(CustomUserDetails userDetails, Long productId, ProductEditRequest productEditRequest) {
+<b class="nc">&nbsp;        Product product = productRepository.findById(productId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Product&quot;, &quot;ID&quot;, productId));</b>
+&nbsp;
+<b class="nc">&nbsp;        if (productEditRequest.getName() != null) {</b>
+<b class="nc">&nbsp;            product.setName(productEditRequest.getName());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (productEditRequest.getStock() != null) {</b>
+<b class="nc">&nbsp;            product.setStock(productEditRequest.getStock());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (productEditRequest.getDescription() != null) {</b>
+<b class="nc">&nbsp;            product.setDescription(productEditRequest.getDescription());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (productEditRequest.getImageURL() != null) {</b>
+<b class="nc">&nbsp;            product.setImageURL(productEditRequest.getImageURL());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (productEditRequest.getPrice() != null) {</b>
+<b class="nc">&nbsp;            product.setPrice(productEditRequest.getPrice());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (productEditRequest.getCategoryId() != null) {</b>
+<b class="nc">&nbsp;            Category category = categoryRepository.findById(productEditRequest.getCategoryId())</b>
+<b class="nc">&nbsp;                    .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Category&quot;, &quot;ID&quot;, productEditRequest.getCategoryId()));</b>
+<b class="nc">&nbsp;            product.setCategory(category);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return productRepository.save(product);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void deleteProduct(CustomUserDetails userDetails, Long productId) {
+<b class="nc">&nbsp;        Product product = productRepository.findById(productId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Product&quot;, &quot;ID&quot;, productId));</b>
+&nbsp;
+<b class="nc">&nbsp;        productRepository.delete(product);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-29 22:00</div>
+</div>
+</body>
+</html>

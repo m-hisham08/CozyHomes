@@ -1,0 +1,182 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PaymentServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.hisham.HomeCentre.services.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: PaymentServiceImpl (com.hisham.HomeCentre.services.impl)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PaymentServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.hisham.HomeCentre.services.impl;
+&nbsp;
+&nbsp;import com.hisham.HomeCentre.exceptions.CustomExceptions.PaymentException;
+&nbsp;import com.hisham.HomeCentre.exceptions.CustomExceptions.ResourceNotFoundException;
+&nbsp;import com.hisham.HomeCentre.models.Order;
+&nbsp;import com.hisham.HomeCentre.models.OrderStatus;
+&nbsp;import com.hisham.HomeCentre.repositories.OrderRepository;
+&nbsp;import com.hisham.HomeCentre.services.PaymentService;
+&nbsp;import com.stripe.Stripe;
+&nbsp;import com.stripe.exception.StripeException;
+&nbsp;import com.stripe.model.PaymentIntent;
+&nbsp;import com.stripe.param.PaymentIntentCreateParams;
+&nbsp;import jakarta.transaction.Transactional;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;
+&nbsp;@Service
+<b class="nc">&nbsp;public class PaymentServiceImpl implements PaymentService {</b>
+&nbsp;    @Autowired
+&nbsp;    public OrderRepository orderRepository;
+&nbsp;
+&nbsp;    @Value(&quot;${stripe.secret.key}&quot;)
+&nbsp;    private String stripeSecretKey;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public PaymentIntent createPaymentIntent(Long orderId) throws StripeException {
+<b class="nc">&nbsp;        Stripe.apiKey = stripeSecretKey;</b>
+&nbsp;
+<b class="nc">&nbsp;        Order order = orderRepository.findById(orderId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Order&quot;, &quot;ID&quot;, orderId));</b>
+&nbsp;
+<b class="nc">&nbsp;        PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()</b>
+<b class="nc">&nbsp;                .setAmount(order.getTotalPrice().multiply(BigDecimal.valueOf(100)).longValue())</b>
+<b class="nc">&nbsp;                .setCurrency(&quot;usd&quot;)</b>
+<b class="nc">&nbsp;                .setDescription(&quot;Payment for order &quot; + order.getId())</b>
+<b class="nc">&nbsp;                .build();</b>
+&nbsp;
+<b class="nc">&nbsp;        return PaymentIntent.create(params);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public void handlePaymentSuccess(String paymentIntentId, Long orderId) {
+<b class="nc">&nbsp;        Stripe.apiKey = stripeSecretKey;</b>
+&nbsp;
+&nbsp;        try {
+<b class="nc">&nbsp;            PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);</b>
+&nbsp;
+&nbsp;            // Check if the PaymentIntent status is &#39;succeeded&#39;
+<b class="nc">&nbsp;            if (&quot;succeeded&quot;.equals(paymentIntent.getStatus())) {</b>
+<b class="nc">&nbsp;                Order order = orderRepository.findById(orderId)</b>
+<b class="nc">&nbsp;                        .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Order&quot;, &quot;ID&quot;, orderId));</b>
+&nbsp;
+<b class="nc">&nbsp;                order.setStatus(OrderStatus.PAID);</b>
+<b class="nc">&nbsp;                orderRepository.save(order);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                throw new PaymentException(&quot;Payment not successful: &quot; + paymentIntent.getStatus());</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } catch (StripeException e) {</b>
+<b class="nc">&nbsp;            throw new PaymentException(&quot;Stripe API error: &quot; + e.getMessage(), e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-29 22:00</div>
+</div>
+</body>
+</html>

@@ -34,6 +34,8 @@ public final class AppConstants {
 
     public static class Redis{
         public static final String PRODUCT_KEY_PREFIX = "product:";
+        public static final String CATEGORY_KEY_PREFIX = "category:";
+        public static final String REVIEW_KEY_PREFIX = "review:";
         public static final Long TIME_TO_LIVE = 3600L; // Cached for one hour
     }
 }

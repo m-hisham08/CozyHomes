@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > CategoryRepositoryTests</title>
+  <title>Coverage Report > CartServiceTests</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,10 +19,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.hisham.HomeCentre.repositories</a>
+    <a href="../index.html">com.hisham.HomeCentre.services</a>
 </div>
 
-<h1>Coverage Summary for Class: CategoryRepositoryTests (com.hisham.HomeCentre.repositories)</h1>
+<h1>Coverage Summary for Class: CartServiceTests (com.hisham.HomeCentre.services)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -41,7 +41,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">CategoryRepositoryTests</td>
+  <td class="name">CartServiceTests</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -55,7 +55,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (3/3)
+    (5/5)
   </span>
 </td>
 <td class="coverageStat">
@@ -63,7 +63,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (19/19)
+    (62/62)
   </span>
 </td>
 </tr>
@@ -75,61 +75,141 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.hisham.HomeCentre.repositories;
+<code class="sourceCode" id="sourceCode">&nbsp;package com.hisham.HomeCentre.services;
 &nbsp;
-&nbsp;import com.hisham.HomeCentre.models.Category;
+&nbsp;import com.hisham.HomeCentre.models.Cart;
+&nbsp;import com.hisham.HomeCentre.models.CartItem;
+&nbsp;import com.hisham.HomeCentre.models.Product;
+&nbsp;import com.hisham.HomeCentre.models.User;
+&nbsp;import com.hisham.HomeCentre.repositories.CartItemRepository;
+&nbsp;import com.hisham.HomeCentre.repositories.CartRepository;
+&nbsp;import com.hisham.HomeCentre.repositories.ProductRepository;
+&nbsp;import com.hisham.HomeCentre.repositories.UserRepository;
+&nbsp;import com.hisham.HomeCentre.services.impl.CartServiceImpl;
+&nbsp;import org.junit.jupiter.api.BeforeEach;
 &nbsp;import org.junit.jupiter.api.Test;
-&nbsp;import org.assertj.core.api.Assertions;
-&nbsp;import org.springframework.beans.factory.annotation.Autowired;
-&nbsp;import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-&nbsp;import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-&nbsp;import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
-&nbsp;import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-&nbsp;import org.springframework.boot.test.context.SpringBootTest;
+&nbsp;import org.mockito.InjectMocks;
+&nbsp;import org.mockito.Mock;
+&nbsp;import org.mockito.MockitoAnnotations;
+&nbsp;import org.springframework.security.core.userdetails.UserDetails;
 &nbsp;
-&nbsp;import java.util.Date;
+&nbsp;import java.util.Optional;
 &nbsp;
-&nbsp;@DataJpaTest
-&nbsp;@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-<b class="fc">&nbsp;public class CategoryRepositoryTests {</b>
-&nbsp;    @Autowired
-&nbsp;    private CategoryRepository categoryRepository;
+&nbsp;import static org.junit.jupiter.api.Assertions.assertEquals;
+&nbsp;import static org.junit.jupiter.api.Assertions.assertNotNull;
+&nbsp;import static org.mockito.Mockito.*;
 &nbsp;
-&nbsp;    @Test
-&nbsp;    public void CategoryRepository_ExistsByName_ReturnsTrueOrFalse(){
-&nbsp;        //Arrange
-<b class="fc">&nbsp;        Category category = new Category();</b>
-<b class="fc">&nbsp;        category.setName(&quot;Electronics&quot;);</b>
-<b class="fc">&nbsp;        category.setCreatedAt(new Date().toInstant());</b>
-<b class="fc">&nbsp;        category.setCreatedBy(Integer.toUnsignedLong(1));</b>
-<b class="fc">&nbsp;        categoryRepository.save(category);</b>
+<b class="fc">&nbsp;public class CartServiceTests {</b>
+&nbsp;    @Mock
+&nbsp;    private CartRepository cartRepository;
 &nbsp;
-&nbsp;        //Act
-<b class="fc">&nbsp;        Boolean isExists = categoryRepository.existsByName(&quot;Electronics&quot;);</b>
+&nbsp;    @Mock
+&nbsp;    private UserRepository userRepository;
 &nbsp;
-&nbsp;        //Assert
-<b class="fc">&nbsp;        Assertions.assertThat(isExists).isTrue();</b>
+&nbsp;    @Mock
+&nbsp;    private CartItemRepository cartItemRepository;
+&nbsp;
+&nbsp;    @Mock
+&nbsp;    private ProductRepository productRepository;
+&nbsp;
+&nbsp;    @InjectMocks
+&nbsp;    private CartServiceImpl cartService;
+&nbsp;
+&nbsp;    @BeforeEach
+&nbsp;    void setUp() {
+<b class="fc">&nbsp;        MockitoAnnotations.openMocks(this);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Test
-&nbsp;    public void CategoryRepository_Save_ReturnsSavedCategory(){
-&nbsp;        //Arrange
-<b class="fc">&nbsp;        Category category1 = new Category();</b>
-<b class="fc">&nbsp;        category1.setName(&quot;Electronics&quot;);</b>
-<b class="fc">&nbsp;        category1.setCreatedAt(new Date().toInstant());</b>
-<b class="fc">&nbsp;        category1.setCreatedBy(Integer.toUnsignedLong(1));</b>
+&nbsp;    void testGetCartByUser() {
+<b class="fc">&nbsp;        UserDetails userDetails = mock(UserDetails.class);</b>
+<b class="fc">&nbsp;        when(userDetails.getUsername()).thenReturn(&quot;testUser&quot;);</b>
 &nbsp;
-<b class="fc">&nbsp;        Category category2 = new Category();</b>
-<b class="fc">&nbsp;        category2.setName(&quot;&quot;);</b>
+<b class="fc">&nbsp;        User user = new User();</b>
+<b class="fc">&nbsp;        user.setId(1L);</b>
+<b class="fc">&nbsp;        user.setUsername(&quot;testUser&quot;);</b>
 &nbsp;
-<b class="fc">&nbsp;        Category category3 = new Category();</b>
+<b class="fc">&nbsp;        Cart cart = new Cart();</b>
+<b class="fc">&nbsp;        cart.setUser(user);</b>
 &nbsp;
-&nbsp;        //Act AND Assert
-<b class="fc">&nbsp;        Category savedCategory1 = categoryRepository.save(category1);</b>
-<b class="fc">&nbsp;        Assertions.assertThat(savedCategory1.getId()).isGreaterThan(0);</b>
+<b class="fc">&nbsp;        when(userRepository.findByEmailOrUsername(&quot;testUser&quot;, &quot;testUser&quot;)).thenReturn(Optional.of(user));</b>
+<b class="fc">&nbsp;        when(cartRepository.findByUserId(1L)).thenReturn(Optional.of(cart));</b>
 &nbsp;
-<b class="fc">&nbsp;        Assertions.assertThatThrownBy(() -&gt; categoryRepository.save(category2)).isInstanceOf(Exception.class);</b>
-<b class="fc">&nbsp;        Assertions.assertThatThrownBy(() -&gt; categoryRepository.save(category3)).isInstanceOf(Exception.class);</b>
+<b class="fc">&nbsp;        Cart result = cartService.getCartByUser(userDetails);</b>
+&nbsp;
+<b class="fc">&nbsp;        assertNotNull(result);</b>
+<b class="fc">&nbsp;        assertEquals(user, result.getUser());</b>
+<b class="fc">&nbsp;        verify(userRepository, times(1)).findByEmailOrUsername(&quot;testUser&quot;, &quot;testUser&quot;);</b>
+<b class="fc">&nbsp;        verify(cartRepository, times(1)).findByUserId(1L);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void testAddProductToCart() {
+<b class="fc">&nbsp;        UserDetails userDetails = mock(UserDetails.class);</b>
+<b class="fc">&nbsp;        when(userDetails.getUsername()).thenReturn(&quot;testUser&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        User user = new User();</b>
+<b class="fc">&nbsp;        user.setId(1L);</b>
+<b class="fc">&nbsp;        user.setUsername(&quot;testUser&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        Product product = new Product();</b>
+<b class="fc">&nbsp;        product.setId(1L);</b>
+&nbsp;
+<b class="fc">&nbsp;        Cart cart = new Cart();</b>
+<b class="fc">&nbsp;        cart.setUser(user);</b>
+&nbsp;
+<b class="fc">&nbsp;        when(userRepository.findByEmailOrUsername(&quot;testUser&quot;, &quot;testUser&quot;)).thenReturn(Optional.of(user));</b>
+<b class="fc">&nbsp;        when(cartRepository.findByUserId(1L)).thenReturn(Optional.of(cart));</b>
+<b class="fc">&nbsp;        when(productRepository.findById(1L)).thenReturn(Optional.of(product));</b>
+&nbsp;
+<b class="fc">&nbsp;        CartItem cartItem = new CartItem();</b>
+<b class="fc">&nbsp;        cartItem.setProduct(product);</b>
+<b class="fc">&nbsp;        cartItem.setQuantity(1L);</b>
+<b class="fc">&nbsp;        cart.addItem(cartItem);</b>
+&nbsp;
+<b class="fc">&nbsp;        when(cartItemRepository.save(any(CartItem.class))).thenReturn(cartItem);</b>
+<b class="fc">&nbsp;        when(cartRepository.save(any(Cart.class))).thenReturn(cart);</b>
+&nbsp;
+<b class="fc">&nbsp;        Cart result = cartService.addProductToCart(userDetails, 1L, 1L);</b>
+&nbsp;
+<b class="fc">&nbsp;        assertNotNull(result);</b>
+<b class="fc">&nbsp;        assertEquals(1, result.getCartItems().size());</b>
+<b class="fc">&nbsp;        verify(userRepository, times(1)).findByEmailOrUsername(&quot;testUser&quot;, &quot;testUser&quot;);</b>
+<b class="fc">&nbsp;        verify(cartRepository, times(1)).findByUserId(1L);</b>
+<b class="fc">&nbsp;        verify(productRepository, times(1)).findById(1L);</b>
+<b class="fc">&nbsp;        verify(cartItemRepository, times(1)).save(any(CartItem.class));</b>
+<b class="fc">&nbsp;        verify(cartRepository, times(1)).save(any(Cart.class));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void testRemoveProductFromCart() {
+<b class="fc">&nbsp;        UserDetails userDetails = mock(UserDetails.class);</b>
+<b class="fc">&nbsp;        when(userDetails.getUsername()).thenReturn(&quot;testUser&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        User user = new User();</b>
+<b class="fc">&nbsp;        user.setId(1L);</b>
+<b class="fc">&nbsp;        user.setUsername(&quot;testUser&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        Product product = new Product();</b>
+<b class="fc">&nbsp;        product.setId(1L);</b>
+&nbsp;
+<b class="fc">&nbsp;        CartItem cartItem = new CartItem();</b>
+<b class="fc">&nbsp;        cartItem.setProduct(product);</b>
+&nbsp;
+<b class="fc">&nbsp;        Cart cart = new Cart();</b>
+<b class="fc">&nbsp;        cart.setUser(user);</b>
+<b class="fc">&nbsp;        cart.addItem(cartItem);</b>
+&nbsp;
+<b class="fc">&nbsp;        when(userRepository.findByEmailOrUsername(&quot;testUser&quot;, &quot;testUser&quot;)).thenReturn(Optional.of(user));</b>
+<b class="fc">&nbsp;        when(cartRepository.findByUserId(1L)).thenReturn(Optional.of(cart));</b>
+<b class="fc">&nbsp;        when(productRepository.findById(1L)).thenReturn(Optional.of(product));</b>
+&nbsp;
+<b class="fc">&nbsp;        cartService.removeProductFromCart(userDetails, 1L);</b>
+&nbsp;
+<b class="fc">&nbsp;        verify(userRepository, times(1)).findByEmailOrUsername(&quot;testUser&quot;, &quot;testUser&quot;);</b>
+<b class="fc">&nbsp;        verify(cartRepository, times(1)).findByUserId(1L);</b>
+<b class="fc">&nbsp;        verify(productRepository, times(1)).findById(1L);</b>
+<b class="fc">&nbsp;        verify(cartItemRepository, times(1)).delete(cartItem);</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -155,7 +235,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-06-22 18:55</div>
+    <div style="float:right;">generated on 2024-06-29 22:00</div>
 </div>
 </body>
 </html>

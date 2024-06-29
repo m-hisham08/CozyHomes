@@ -15,6 +15,7 @@ import com.hisham.HomeCentre.repositories.UserRepository;
 import com.hisham.HomeCentre.security.CurrentUser;
 import com.hisham.HomeCentre.security.CustomUserDetails;
 import com.hisham.HomeCentre.services.ProductService;
+import com.hisham.HomeCentre.services.RedisService;
 import com.hisham.HomeCentre.services.ReviewService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class ReviewController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private RedisService redisService;
+
     @GetMapping("/product/{productId}")
     public ResponseEntity<PagedResponse<ReviewResponse>> getAllReviews(
             @PathVariable(name = "productId") Long productId,
@@ -49,6 +53,12 @@ public class ReviewController {
             @RequestParam(name = "sortDirection", defaultValue = AppConstants.Defaults.SORT) String sortDirection
     )
     {
+        String cacheKey = String.format("reviews::page:%d::size:%d::sortBy:%s::sortDirection:%s", page, size, sortBy, sortDirection);
+        PagedResponse<ReviewResponse> cachedResponse = redisService.get(cacheKey, PagedResponse.class);
+        if (cachedResponse != null) {
+            return ResponseEntity.ok(cachedResponse);
+        }
+
         Page<Review> pagedReviews = reviewService.getAllReviews(productId, page, size, sortDirection, sortBy);
 
         List<Review> reviews = pagedReviews.getContent();
@@ -68,15 +78,24 @@ public class ReviewController {
                     .build());
         }
 
-        return ResponseEntity.ok(new PagedResponse<ReviewResponse>(
+        PagedResponse<ReviewResponse> response = new PagedResponse<ReviewResponse>(
                 reviewResponseList, pagedReviews.getNumber(), pagedReviews.getSize(), pagedReviews.getNumberOfElements(), pagedReviews.getTotalPages(), pagedReviews.isLast()
-        ));
+        );
+        redisService.set(cacheKey, response, AppConstants.Redis.TIME_TO_LIVE);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{reviewId}")
     public ResponseEntity<ReviewResponse> getReview(
             @PathVariable(name = "reviewId") Long reviewId
     ){
+        String cacheKey = AppConstants.Redis.REVIEW_KEY_PREFIX + reviewId;
+        ReviewResponse cachedResponse = redisService.get(cacheKey,ReviewResponse.class);
+        if(cachedResponse != null){
+                return ResponseEntity.ok(cachedResponse);
+        }
+
         Review review = reviewService.getSingleReview(reviewId);
 
         User user = userRepository.findById(review.getCreatedBy())
@@ -106,6 +125,8 @@ public class ReviewController {
                 .createdAt(review.getCreatedAt())
                 .createdBy(userSummary)
                 .build();
+
+        redisService.set(cacheKey, reviewResponse, AppConstants.Redis.TIME_TO_LIVE);
 
         return ResponseEntity.ok(reviewResponse);
     }
@@ -150,6 +171,9 @@ public class ReviewController {
     {
         reviewService.deleteReview(userDetails, reviewId);
 
+        String cacheKey = AppConstants.Redis.REVIEW_KEY_PREFIX + reviewId;
+        redisService.delete(cacheKey);
+        
         return ResponseEntity.noContent().build();
     }
 

@@ -1,0 +1,237 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ReviewServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.hisham.HomeCentre.services.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: ReviewServiceImpl (com.hisham.HomeCentre.services.impl)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ReviewServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/37)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.hisham.HomeCentre.services.impl;
+&nbsp;
+&nbsp;import com.hisham.HomeCentre.constants.AppConstants;
+&nbsp;import com.hisham.HomeCentre.exceptions.CustomExceptions.BadRequestException;
+&nbsp;import com.hisham.HomeCentre.exceptions.CustomExceptions.ResourceNotFoundException;
+&nbsp;import com.hisham.HomeCentre.exceptions.CustomExceptions.UnauthorizedException;
+&nbsp;import com.hisham.HomeCentre.models.Product;
+&nbsp;import com.hisham.HomeCentre.models.Review;
+&nbsp;import com.hisham.HomeCentre.models.User;
+&nbsp;import com.hisham.HomeCentre.payloads.reviews.ReviewRequest;
+&nbsp;import com.hisham.HomeCentre.repositories.ProductRepository;
+&nbsp;import com.hisham.HomeCentre.repositories.ReviewRepository;
+&nbsp;import com.hisham.HomeCentre.repositories.UserRepository;
+&nbsp;import com.hisham.HomeCentre.services.ReviewService;
+&nbsp;import jakarta.transaction.Transactional;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Pageable;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.security.core.userdetails.UserDetails;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.web.bind.annotation.RequestBody;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Service
+<b class="nc">&nbsp;public class ReviewServiceImpl implements ReviewService {</b>
+&nbsp;    @Autowired
+&nbsp;    private ReviewRepository reviewRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private ProductRepository productRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private UserRepository userRepository;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public Page&lt;Review&gt; getAllReviews(Long productId, int page, int size, String sortDirection, String sortBy) {
+<b class="nc">&nbsp;        if (page &lt; 0) {</b>
+<b class="nc">&nbsp;            throw new BadRequestException(&quot;Page number cannot be less than zero.&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (size &gt; AppConstants.Defaults.MAX_PAGE_SIZE) {</b>
+<b class="nc">&nbsp;            throw new BadRequestException(&quot;Page number cannot exceed &quot; + AppConstants.Defaults.MAX_PAGE_SIZE);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (!sortDirection.equals(&quot;ASC&quot;) &amp;&amp; !sortDirection.equals(&quot;DESC&quot;)) {</b>
+<b class="nc">&nbsp;            throw new BadRequestException(&quot;Invalid sort direction!&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Product product = productRepository.findById(productId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Product&quot;, &quot;ID&quot;, productId));</b>
+&nbsp;
+&nbsp;        Pageable pageable;
+<b class="nc">&nbsp;        if(sortDirection.equals(&quot;ASC&quot;)){</b>
+<b class="nc">&nbsp;            pageable = PageRequest.of(page, size, Sort.Direction.ASC, sortBy);</b>
+&nbsp;        }
+&nbsp;        else{
+<b class="nc">&nbsp;            pageable = PageRequest.of(page, size, Sort.Direction.DESC, sortBy);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        Page&lt;Review&gt; reviews = reviewRepository.findByProduct(product, pageable);</b>
+&nbsp;
+<b class="nc">&nbsp;        return reviews;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public Review getSingleReview(Long reviewId) {
+<b class="nc">&nbsp;        if(reviewId &lt;= 0){</b>
+<b class="nc">&nbsp;            throw new ResourceNotFoundException(&quot;Review&quot;, &quot;ID&quot;, reviewId);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Review review = reviewRepository.findById(reviewId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Review&quot;, &quot;ID&quot;, reviewId));</b>
+&nbsp;
+<b class="nc">&nbsp;        return review;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public Review createReview(
+&nbsp;            Long productId,
+&nbsp;            ReviewRequest reviewRequest
+&nbsp;    ) {
+<b class="nc">&nbsp;        Product product = productRepository.findById(productId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Product&quot;, &quot;ID&quot;, productId));</b>
+&nbsp;
+<b class="nc">&nbsp;        Review review = Review.builder()</b>
+<b class="nc">&nbsp;                .product(product)</b>
+<b class="nc">&nbsp;                .comment(reviewRequest.getComment())</b>
+<b class="nc">&nbsp;                .rating(reviewRequest.getRating())</b>
+<b class="nc">&nbsp;                .build();</b>
+&nbsp;
+<b class="nc">&nbsp;        product.addReview(review);</b>
+&nbsp;
+<b class="nc">&nbsp;        return reviewRepository.save(review);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public void deleteReview(UserDetails userDetails, Long reviewId) {
+<b class="nc">&nbsp;        if(reviewId &lt;= 0){</b>
+<b class="nc">&nbsp;            throw new BadRequestException(&quot;Invalid Review ID!&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Review review = reviewRepository.findById(reviewId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Review&quot;, &quot;ID&quot;, reviewId));</b>
+&nbsp;
+<b class="nc">&nbsp;        User user = userRepository.findById(review.getCreatedBy())</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User&quot;, &quot;ID&quot;, review.getCreatedBy()));</b>
+&nbsp;
+<b class="nc">&nbsp;        if(!userDetails.getUsername().equals(user.getUsername())){</b>
+<b class="nc">&nbsp;            throw new UnauthorizedException(&quot;You do not have the access rights to modify this resource!&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        reviewRepository.delete(review);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-29 22:00</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,230 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ReviewServiceTests</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.hisham.HomeCentre.services</a>
+</div>
+
+<h1>Coverage Summary for Class: ReviewServiceTests (com.hisham.HomeCentre.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ReviewServiceTests</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/53)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.hisham.HomeCentre.services;
+&nbsp;
+&nbsp;import com.hisham.HomeCentre.models.Product;
+&nbsp;import com.hisham.HomeCentre.models.Review;
+&nbsp;import com.hisham.HomeCentre.models.User;
+&nbsp;import com.hisham.HomeCentre.payloads.reviews.ReviewRequest;
+&nbsp;import com.hisham.HomeCentre.repositories.ProductRepository;
+&nbsp;import com.hisham.HomeCentre.repositories.ReviewRepository;
+&nbsp;import com.hisham.HomeCentre.repositories.UserRepository;
+&nbsp;import com.hisham.HomeCentre.services.impl.ReviewServiceImpl;
+&nbsp;import org.junit.jupiter.api.BeforeEach;
+&nbsp;import org.junit.jupiter.api.Test;
+&nbsp;import org.mockito.InjectMocks;
+&nbsp;import org.mockito.Mock;
+&nbsp;import org.mockito.MockitoAnnotations;
+&nbsp;import org.springframework.data.domain.*;
+&nbsp;import org.springframework.security.core.userdetails.UserDetails;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;import static org.junit.jupiter.api.Assertions.assertEquals;
+&nbsp;import static org.junit.jupiter.api.Assertions.assertNotNull;
+&nbsp;import static org.mockito.Mockito.*;
+&nbsp;
+<b class="nc">&nbsp;public class ReviewServiceTests {</b>
+&nbsp;    @Mock
+&nbsp;    private ReviewRepository reviewRepository;
+&nbsp;
+&nbsp;    @Mock
+&nbsp;    private ProductRepository productRepository;
+&nbsp;
+&nbsp;    @Mock
+&nbsp;    private UserRepository userRepository;
+&nbsp;
+&nbsp;    @InjectMocks
+&nbsp;    private ReviewServiceImpl reviewService;
+&nbsp;
+&nbsp;    @BeforeEach
+&nbsp;    void setUp() {
+<b class="nc">&nbsp;        MockitoAnnotations.openMocks(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void testGetAllReviews() {
+<b class="nc">&nbsp;        Long productId = 1L;</b>
+<b class="nc">&nbsp;        int page = 0;</b>
+<b class="nc">&nbsp;        int size = 10;</b>
+<b class="nc">&nbsp;        String sortDirection = &quot;ASC&quot;;</b>
+<b class="nc">&nbsp;        String sortBy = &quot;comment&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        Product product = new Product();</b>
+<b class="nc">&nbsp;        when(productRepository.findById(productId)).thenReturn(Optional.of(product));</b>
+&nbsp;
+<b class="nc">&nbsp;        Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, sortBy);</b>
+<b class="nc">&nbsp;        Page&lt;Review&gt; reviewPage = new PageImpl&lt;&gt;(List.of(new Review(), new Review()));</b>
+<b class="nc">&nbsp;        when(reviewRepository.findByProduct(product, pageable)).thenReturn(reviewPage);</b>
+&nbsp;
+<b class="nc">&nbsp;        Page&lt;Review&gt; result = reviewService.getAllReviews(productId, page, size, sortDirection, sortBy);</b>
+&nbsp;
+<b class="nc">&nbsp;        assertEquals(2, result.getContent().size());</b>
+<b class="nc">&nbsp;        verify(productRepository, times(1)).findById(productId);</b>
+<b class="nc">&nbsp;        verify(reviewRepository, times(1)).findByProduct(product, pageable);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void testGetSingleReview() {
+<b class="nc">&nbsp;        Long reviewId = 1L;</b>
+<b class="nc">&nbsp;        Review review = new Review();</b>
+<b class="nc">&nbsp;        review.setId(reviewId);</b>
+&nbsp;
+<b class="nc">&nbsp;        when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));</b>
+&nbsp;
+<b class="nc">&nbsp;        Review result = reviewService.getSingleReview(reviewId);</b>
+&nbsp;
+<b class="nc">&nbsp;        assertNotNull(result);</b>
+<b class="nc">&nbsp;        assertEquals(reviewId, result.getId());</b>
+<b class="nc">&nbsp;        verify(reviewRepository, times(1)).findById(reviewId);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void testCreateReview() {
+<b class="nc">&nbsp;        Long productId = 1L;</b>
+<b class="nc">&nbsp;        ReviewRequest reviewRequest = new ReviewRequest();</b>
+<b class="nc">&nbsp;        reviewRequest.setComment(&quot;Great product!&quot;);</b>
+<b class="nc">&nbsp;        reviewRequest.setRating(5F);</b>
+&nbsp;
+<b class="nc">&nbsp;        Product product = new Product();</b>
+<b class="nc">&nbsp;        when(productRepository.findById(productId)).thenReturn(Optional.of(product));</b>
+&nbsp;
+<b class="nc">&nbsp;        Review review = new Review();</b>
+<b class="nc">&nbsp;        when(reviewRepository.save(any(Review.class))).thenReturn(review);</b>
+&nbsp;
+<b class="nc">&nbsp;        Review result = reviewService.createReview(productId, reviewRequest);</b>
+&nbsp;
+<b class="nc">&nbsp;        assertNotNull(result);</b>
+<b class="nc">&nbsp;        assertEquals(&quot;Great product!&quot;, result.getComment());</b>
+<b class="nc">&nbsp;        assertEquals(5, result.getRating());</b>
+<b class="nc">&nbsp;        verify(productRepository, times(1)).findById(productId);</b>
+<b class="nc">&nbsp;        verify(reviewRepository, times(1)).save(any(Review.class));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void testDeleteReview() {
+<b class="nc">&nbsp;        Long reviewId = 1L;</b>
+<b class="nc">&nbsp;        UserDetails userDetails = mock(UserDetails.class);</b>
+<b class="nc">&nbsp;        when(userDetails.getUsername()).thenReturn(&quot;user&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        Review review = new Review();</b>
+<b class="nc">&nbsp;        review.setId(reviewId);</b>
+<b class="nc">&nbsp;        review.setCreatedBy(1L);</b>
+&nbsp;
+<b class="nc">&nbsp;        User user = new User();</b>
+<b class="nc">&nbsp;        user.setId(1L);</b>
+<b class="nc">&nbsp;        user.setUsername(&quot;user&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));</b>
+<b class="nc">&nbsp;        when(userRepository.findById(review.getCreatedBy())).thenReturn(Optional.of(user));</b>
+&nbsp;
+<b class="nc">&nbsp;        reviewService.deleteReview(userDetails, reviewId);</b>
+&nbsp;
+<b class="nc">&nbsp;        verify(reviewRepository, times(1)).findById(reviewId);</b>
+<b class="nc">&nbsp;        verify(userRepository, times(1)).findById(review.getCreatedBy());</b>
+<b class="nc">&nbsp;        verify(reviewRepository, times(1)).delete(review);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-29 22:00</div>
+</div>
+</body>
+</html>

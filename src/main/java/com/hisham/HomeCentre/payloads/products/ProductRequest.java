@@ -3,10 +3,12 @@ package com.hisham.HomeCentre.payloads.products;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Getter
+@Setter
 public class ProductRequest {
     @NotBlank
     @Size(max = 40, min = 4)

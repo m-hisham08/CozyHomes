@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > UserRepository</title>
+  <title>Coverage Report > EmailConsumerService</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,17 +19,53 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.hisham.HomeCentre.repositories</a>
+    <a href="../index.html">com.hisham.HomeCentre.services</a>
 </div>
 
-<h1>Coverage Summary for Class: UserRepository (com.hisham.HomeCentre.repositories)</h1>
+<h1>Coverage Summary for Class: EmailConsumerService (com.hisham.HomeCentre.services)</h1>
 
 <table class="coverageStats">
 <tr>
   <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
 </tr>
 <tr>
-  <td class="name">UserRepository</td>
+  <td class="name">EmailConsumerService</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
 </tr>
 
 </table>
@@ -39,20 +75,27 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.hisham.HomeCentre.repositories;
+<code class="sourceCode" id="sourceCode">&nbsp;package com.hisham.HomeCentre.services;
 &nbsp;
-&nbsp;import com.hisham.HomeCentre.models.User;
-&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
-&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;import com.hisham.HomeCentre.models.kafka.EmailData;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.kafka.annotation.KafkaListener;
+&nbsp;import org.springframework.stereotype.Service;
 &nbsp;
-&nbsp;import java.util.Optional;
+&nbsp;@Service
+<b class="nc">&nbsp;public class EmailConsumerService {</b>
 &nbsp;
-&nbsp;@Repository
-&nbsp;public interface UserRepository extends JpaRepository&lt;User, Long&gt; {
-&nbsp;    Optional&lt;User&gt; findByEmailOrUsername(String email, String username);
-&nbsp;    Optional&lt;User&gt; findById(Long id);
-&nbsp;    Boolean existsByUsername(String username);
-&nbsp;    Boolean existsByEmail(String email);
+&nbsp;    @Autowired
+&nbsp;    private EmailService emailService;
+&nbsp;
+&nbsp;    @KafkaListener(topics = &quot;email&quot;, groupId = &quot;email-group&quot;)
+&nbsp;    public void consume(EmailData emailData){
+<b class="nc">&nbsp;        sendEmail(emailData);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void sendEmail(EmailData emailData){
+<b class="nc">&nbsp;        emailService.sendEmail(emailData.getTo(), emailData.getSubject(), emailData.getContent());</b>
+&nbsp;    }
 &nbsp;}
 </code>
 </pre>
@@ -77,7 +120,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-06-22 18:55</div>
+    <div style="float:right;">generated on 2024-06-29 22:00</div>
 </div>
 </body>
 </html>

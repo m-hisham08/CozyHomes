@@ -1,5 +1,6 @@
 package com.hisham.HomeCentre.controllers;
 
+import com.hisham.HomeCentre.constants.AppConstants;
 import com.hisham.HomeCentre.exceptions.CustomExceptions.ResourceNotFoundException;
 import com.hisham.HomeCentre.models.Category;
 import com.hisham.HomeCentre.models.User;
@@ -11,6 +12,7 @@ import com.hisham.HomeCentre.repositories.UserRepository;
 import com.hisham.HomeCentre.security.CurrentUser;
 import com.hisham.HomeCentre.security.CustomUserDetails;
 import com.hisham.HomeCentre.services.CategoryService;
+import com.hisham.HomeCentre.services.RedisService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,8 +34,18 @@ CategoryController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RedisService redisService;
+
     @GetMapping("")
     public ResponseEntity<List<CategoryResponse>> getAllCategories(){
+        String cacheKey = AppConstants.Redis.CATEGORY_KEY_PREFIX + "all";
+
+        List<CategoryResponse> cachedResponse = redisService.get(cacheKey, List.class);
+        if (cachedResponse != null) {
+            return ResponseEntity.ok(cachedResponse);
+        }
+
         List<Category> categoryList = categoryService.getAllCategories();
 
         List<CategoryResponse> categoryResponse = new ArrayList<>();
@@ -60,11 +72,20 @@ CategoryController {
                     )
             );
         }
+
+        redisService.set(cacheKey, categoryResponse, 3600L);
+
         return ResponseEntity.ok(categoryResponse);
     }
 
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryResponse> getCategory(@PathVariable Long categoryId){
+        String cacheKey = AppConstants.Redis.CATEGORY_KEY_PREFIX + categoryId;
+        CategoryResponse cachedResponse = redisService.get(cacheKey, CategoryResponse.class);
+        if(cachedResponse != null){
+            return ResponseEntity.ok(cachedResponse);
+        }
+
         Category category = categoryService.getCategory(categoryId);
 
         User createdByUser = userRepository.findById(category.getCreatedBy())
@@ -79,7 +100,11 @@ CategoryController {
                 modifiedByUser.getId(), modifiedByUser.getFirstName(), modifiedByUser.getLastName(), modifiedByUser.getUsername()
         );
 
-        return ResponseEntity.ok(new CategoryResponse(category.getId(), category.getName(), category.getCreatedAt(), category.getLastModifiedAt(), createdByUserSummary, modifiedByUserSummary));
+        CategoryResponse categoryResponse = new CategoryResponse(category.getId(), category.getName(), category.getCreatedAt(), category.getLastModifiedAt(), createdByUserSummary, modifiedByUserSummary);
+
+        redisService.set(cacheKey, categoryResponse, AppConstants.Redis.TIME_TO_LIVE);
+
+        return ResponseEntity.ok(categoryResponse);
     }
 
     @PostMapping("")
@@ -105,6 +130,10 @@ CategoryController {
             @RequestBody @Valid CategoryRequest categoryRequest
     ){
         categoryService.editCategory(userDetails, categoryId, categoryRequest.getName());
+
+        String cacheKey = AppConstants.Redis.CATEGORY_KEY_PREFIX + categoryId;
+        redisService.delete(cacheKey);
+
         return ResponseEntity.ok(new APIResponse(Boolean.TRUE, "Category updated successfully!"));
     }
 
@@ -113,6 +142,10 @@ CategoryController {
             @PathVariable Long categoryId
     ){
         categoryService.deleteCategory(categoryId);
+
+        String cacheKey = AppConstants.Redis.CATEGORY_KEY_PREFIX + categoryId;
+        redisService.delete(cacheKey);
+
         return ResponseEntity.noContent().build();
     }
 

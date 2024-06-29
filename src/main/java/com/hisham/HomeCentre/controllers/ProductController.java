@@ -18,6 +18,7 @@ import com.hisham.HomeCentre.security.CurrentUser;
 import com.hisham.HomeCentre.security.CustomUserDetails;
 import com.hisham.HomeCentre.services.CategoryService;
 import com.hisham.HomeCentre.services.ProductService;
+import com.hisham.HomeCentre.services.RedisService;
 import com.hisham.HomeCentre.services.impl.ProductServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,13 +44,15 @@ public class ProductController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RedisService redisService;
+
     @GetMapping("")
     public ResponseEntity<PagedResponse<ProductResponse>> getAllProducts(
             @RequestParam(name = "page", defaultValue = AppConstants.Defaults.PAGE_NUMBER) int page,
             @RequestParam(name = "size", defaultValue = AppConstants.Defaults.PAGE_SIZE) int size,
             @RequestParam(name = "sortBy", defaultValue = AppConstants.Defaults.SORT_BY) String sortBy,
             @RequestParam(name = "sortDirection", defaultValue = AppConstants.Defaults.SORT) String sortDirection
-
     ) {
         if (page < 0) {
             throw new BadRequestException("Page number cannot be less than zero.");
@@ -61,6 +64,12 @@ public class ProductController {
             throw new BadRequestException("Invalid sort direction!");
         }
 
+        String cacheKey = String.format("products::page:%d::size:%d::sortBy:%s::sortDirection:%s", page, size, sortBy, sortDirection);
+        PagedResponse<ProductResponse> cachedResponse = redisService.get(cacheKey, PagedResponse.class);
+        if (cachedResponse != null) {
+            return ResponseEntity.ok(cachedResponse);
+        }
+
         Page<Product> pagedProduct;
         if (sortDirection.equals("ASC")) {
             pagedProduct = productService.getAllProducts(page, size, Sort.Direction.ASC, sortBy);
@@ -69,16 +78,16 @@ public class ProductController {
         }
 
         List<Product> products = pagedProduct.getContent();
-
         List<ProductResponse> productResponseList = new ArrayList<>();
-        for (Product product: products){
+
+        for (Product product : products) {
             Category category = categoryService.getCategory(product.getCategory().getId());
             CategoryResponse categoryResponse = CategoryResponse.builder()
-                            .id(category.getId())
-                                    .name(category.getName()).build();
+                    .id(category.getId())
+                    .name(category.getName()).build();
 
             User user = userRepository.findById(product.getCreatedBy())
-                            .orElseThrow(() -> new ResourceNotFoundException("User", "ID", product.getCreatedBy()));
+                    .orElseThrow(() -> new ResourceNotFoundException("User", "ID", product.getCreatedBy()));
             UserSummary userSummary = UserSummary.builder()
                     .id(user.getId())
                     .username(user.getUsername())
@@ -92,7 +101,7 @@ public class ProductController {
             productResponse.setPrice(product.getPrice());
             productResponse.setImageURL(product.getImageURL());
             productResponse.setStock(product.getStock());
-            productResponse.setDescription(productResponse.getDescription());
+            productResponse.setDescription(product.getDescription());
             productResponse.setCreatedAt(product.getCreatedAt());
             productResponse.setLastModifiedAt(product.getLastModifiedAt());
             productResponse.setCategory(categoryResponse);
@@ -100,11 +109,30 @@ public class ProductController {
 
             productResponseList.add(productResponse);
         }
-        return ResponseEntity.ok(new PagedResponse<ProductResponse>(productResponseList, pagedProduct.getNumber(), pagedProduct.getSize(), pagedProduct.getNumberOfElements(), pagedProduct.getTotalPages(), pagedProduct.isLast()));
+
+        PagedResponse<ProductResponse> response = new PagedResponse<>(
+                productResponseList,
+                pagedProduct.getNumber(),
+                pagedProduct.getSize(),
+                pagedProduct.getNumberOfElements(),
+                pagedProduct.getTotalPages(),
+                pagedProduct.isLast()
+        );
+
+        redisService.set(cacheKey, response, AppConstants.Redis.TIME_TO_LIVE);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable(name = "productId") Long productId){
+
+        String cacheKey = AppConstants.Redis.PRODUCT_KEY_PREFIX + productId;
+        ProductResponse cachedProduct = redisService.get(cacheKey, ProductResponse.class);
+        if (cachedProduct != null) {
+            return ResponseEntity.ok(cachedProduct);
+        }
+
         Product product = productService.getSingleProduct(productId);
 
         Category category = categoryService.getCategory(product.getCategory().getId());
@@ -132,6 +160,8 @@ public class ProductController {
         productResponse.setLastModifiedAt(product.getLastModifiedAt());
         productResponse.setCategory(categoryResponse);
         productResponse.setCreatedBy(userSummary);
+
+        redisService.set(cacheKey, productResponse, AppConstants.Redis.TIME_TO_LIVE);
 
         return ResponseEntity.ok(productResponse);
     }
@@ -164,6 +194,9 @@ public class ProductController {
         Product product = productService.getSingleProduct(productId);
         productService.deleteProduct(userDetails, product.getId());
 
+        String cacheKey = AppConstants.Redis.PRODUCT_KEY_PREFIX + productId;
+        redisService.delete(cacheKey);
+
         return ResponseEntity.noContent().build();
     }
 
@@ -191,18 +224,22 @@ public class ProductController {
                .orElseThrow(() -> new ResourceNotFoundException("User", "ID", editedProduct.getCreatedBy()));
        UserSummary userSummary = new UserSummary(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername());
 
+        ProductResponse productResponse = ProductResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .category(categoryResponse)
+                .description(product.getDescription())
+                .imageURL(product.getImageURL())
+                .price(product.getPrice())
+                .stock(product.getStock())
+                .createdAt(product.getCreatedAt())
+                .createdBy(userSummary)
+                .isAvailable(product.getStock() > 0)
+                .build();
 
-       return ResponseEntity.ok().body(ProductResponse.builder()
-               .id(product.getId())
-               .name(product.getName())
-               .category(categoryResponse)
-               .description(product.getDescription())
-               .imageURL(product.getImageURL())
-               .price(product.getPrice())
-               .stock(product.getStock())
-               .createdAt(product.getCreatedAt())
-               .createdBy(userSummary)
-               .isAvailable(product.getStock() > 0)
-               .build());
+        String cacheKey = AppConstants.Redis.PRODUCT_KEY_PREFIX + productId;
+        redisService.set(cacheKey, productResponse, AppConstants.Redis.TIME_TO_LIVE);
+
+       return ResponseEntity.ok().body(productResponse);
     }
 }

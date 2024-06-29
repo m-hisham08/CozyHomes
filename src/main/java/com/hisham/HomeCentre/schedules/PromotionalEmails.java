@@ -24,8 +24,8 @@ public class PromotionalEmails {
     @Autowired
     private KafkaTemplate<String, EmailData> kafkaTemplate;
 
-//    @Scheduled(cron = "0 0 9 ? * MON") // Every Monday at 9 AM
-     @Scheduled(cron = "0 * * ? * *") // Every Minute (Test with breakpoints)
+//     @Scheduled(cron = "0 * * ? * *") // Every Minute (Test with breakpoints)
+    @Scheduled(cron = "0 0 9 ? * MON") // Every Monday at 9 AM
     public void getAllUsersAndSendPromotionalEmails(){
         List<User> users = userRepository.findAll();
         for (User user: users){
@@ -62,7 +62,7 @@ public class PromotionalEmails {
                     "</html>\n";
             String to = user.getEmail();
 
-            EmailData emailData = new EmailData("hishamstudyjam@gmail.com", subject, content);
+            EmailData emailData = new EmailData(to, subject, content);
             kafkaTemplate.send("email", to, emailData);
 //            emailService.sendEmail(to, subject, content);
         }
