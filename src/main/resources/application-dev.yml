@@ -1,23 +1,65 @@
 spring:
   application:
-    name: HomeCentre-dev
+    name: CozyHomes-dev
   datasource:
-    url: jdbc:postgresql://localhost:5432/cozy_homes
-    username: cozyhomes
-    password: 852123hh
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}
+    consumer:
+      group-id: email-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.hisham.HomeCentre.models.kafka"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_ADDRESS}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate.format_sql: true
+
   jackson:
     serialization:
-      WRITE_DATES_AS_TIMESTAMPS: false
+      write-dates-as-timestamps: false
+      write-date-timestamps-as-nanoseconds: false
     time-zone: UTC
+
 app:
-  jwtSecret: 9a02115a835ee03d5fb83cd8a468ea33e4090aaaec87f53c9fa54512bbef4db8dc656c82a315fa0c785c08b0134716b81ddcd0153d2a7556f2e154912cf5675f
-  jwtExpirationInMs: 604800000
+  jwtSecret: ${JWT_SECRET}
+  jwtExpirationInMs: ${JWT_EXPIRATION_TIME_IN_MS}
+  cloudName: ${CLOUDINARY_CLOUD_NAME}
+  apiKey: ${CLOUDINARY_API_KEY}
+  apiSecret: ${CLOUDINARY_API_SECRET}
+  secure: true
+
+stripe:
+  secret:
+    key: ${STRIPE_API_SECRET}
 
 logging:
   config: classpath:logback-spring-dev.xml

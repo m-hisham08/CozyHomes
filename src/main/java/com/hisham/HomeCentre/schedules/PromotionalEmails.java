@@ -54,7 +54,7 @@ public class PromotionalEmails {
                     "    <p>Visit our website now to explore these fantastic deals and more. Thank you for being a valued member of our community. We're always here to make your shopping experience better.</p>\n" +
                     "    <p>Happy Shopping!</p>\n" +
                     "    <p>Best regards,<br>\n" +
-                    "    Mohammad Hisham<br>\n" +
+                    "    John Doe<br>\n" +
                     "    <a href=\"https://stock.adobe.com/search?k=cat\">CozyHomes.in</a>\n" +
                     "    </p>\n" +
                     "</body>\n" +

@@ -1,0 +1,4 @@
+# In application.properties
+spring:
+  profiles:
+    active: ${ACTIVE_PROFILE}
