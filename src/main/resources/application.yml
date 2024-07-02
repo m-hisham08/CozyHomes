@@ -1,4 +1,3 @@
-# In application.properties
 spring:
   profiles:
-    active: ${ACTIVE_PROFILE}
+    active: ${ACTIVE_PROFILE} # Set this value to either dev OR prod (Follow the naming convention)
