@@ -85,7 +85,7 @@ Ensure you have the following installed:
 ### Installation
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/CozyHomes.git
+   git clone https://github.com/m-hisham08/CozyHomes.git
    ```
 2. Navigate to the project directory:
    ```
