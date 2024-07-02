@@ -99,7 +99,7 @@ Ensure you have the following installed:
 ## Configuration
 
 ### Database Setup
-1. Create a MySQL database for the application.
+1. Create a PostgreSQL database for the application.
 2. Update the `application-dev.yml` and `application-prod.yml` files with your database credentials.
 
 ### Redis Setup
