@@ -182,7 +182,7 @@ The application exposes the following main API endpoints:
 - Orders: `/api/v1/orders/**`
 - Reviews: `/api/v1/reviews/**`
 - Payments: `/api/v1/payments/**`
-- Uploads: `/api/payments/**`
+- Uploads: `/api/v1/upload`
 
 For a complete list of endpoints and their usage, please refer the Swagger UI documentation provided at `http://localhost:8080/swagger-ui/index.html`
 
