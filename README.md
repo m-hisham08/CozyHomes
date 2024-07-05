@@ -1,6 +1,6 @@
-# CozyHomes E-commerce Platform
+# CozyHomes E-commerce API
 
-CozyHomes is a robust e-commerce platform for home decor and furnishings, not limited to those items, built with Spring Boot and other technologies. This platform offers a seamless shopping experience with features like user authentication, product management, shopping cart functionality, secure payments, and more.
+CozyHomes is an e-commerce API that supplements a platform for home decor and furnishings, not limited to those items, built with Spring Boot and other technologies. The API offers a seamless shopping experience with features like user authentication, product management, shopping cart functionality, secure payments, and more. The project is built as a way to showcase my skills that I learned over the last few months.
 
 ## Table of Contents
 - [Features](#features)
